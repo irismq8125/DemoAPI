@@ -1,4 +1,5 @@
 ﻿using DemoApi.Models.Entity;
+using DemoApi.Models.Khoa;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,15 +20,16 @@ namespace DemoApi.Controllers
         [HttpGet("danh-sach-khoa-1")] 
         public IActionResult DanhSachKhoa1()
         {
-            var items = _context.Khoas.ToList();
+            var items = _context.Khoas
+                .Select(c => new OutputKhoa()
+                {
+                    Id = c.Id,
+                    MaKhoa = c.MaKhoa,
+                    TenKhoa = c.TenKhoa,
+                    Sdt = c.Sdt,
+                })
+                .ToList();
             return Ok(items);
-        }
-
-        [HttpGet("danh-sach-khoa-2")]
-        public List<Khoa> DanhSachKhoa2()
-        {
-            var items = _context.Khoas.ToList();
-            return items;
         }
 
         //api get 1 data
@@ -53,16 +55,42 @@ namespace DemoApi.Controllers
 
         //api post data
         [HttpPost("them-moi-khoa")]
-        public IActionResult TaoKhoa()
+        //public IActionResult TaoKhoa(InputKhoa input)
+        public IActionResult TaoKhoa([FromForm] InputKhoa input)
         {
-            return Ok();
+            if(ModelState.IsValid)
+            {
+                Khoa khoa = new Khoa();
+                khoa.Id = Guid.NewGuid().ToString();
+                khoa.MaKhoa = input.MaKhoa;
+                khoa.TenKhoa = input.TenKhoa;
+                khoa.Sdt = input.SDT;
+                khoa.Filter = input.MaKhoa + " " + input.TenKhoa;
+
+                _context.Khoas.Add(khoa);
+                _context.SaveChanges();
+                return Ok(khoa);
+            }
+            return BadRequest();
         }
 
         //api put data
-        [HttpPut("cap-nhat-khoa")]
-        public IActionResult CapNhat()
+        [HttpPut("cap-nhat-khoa/{id}")]
+        public IActionResult CapNhat(Guid id, [FromForm] UpdateKhoa input)
         {
-            return Ok();
+            var item = _context.Khoas.FirstOrDefault(c => c.Id == id.ToString());
+            if (item != null)
+            {
+                item.MaKhoa = input.MaKhoa;
+                item.TenKhoa = input.TenKhoa;
+                item.Sdt = input.SDT;
+                item.Filter = input.MaKhoa + " " + input.TenKhoa;
+
+                _context.Khoas.Update(item);
+                _context.SaveChanges();
+                return Ok(item);
+            }
+            return NotFound();
         }
 
     }
