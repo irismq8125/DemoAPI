@@ -26,4 +26,6 @@ public partial class Khoa
 
     [StringLength(1000)]
     public string? Filter { get; set; }
+
+    public string? UrlImages { get; set; }
 }

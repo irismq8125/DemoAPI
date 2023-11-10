@@ -1,7 +1,9 @@
-﻿using DemoApi.Models.Entity;
+﻿using DemoApi.Common;
+using DemoApi.Models.Entity;
 using DemoApi.Models.Khoa;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace DemoApi.Controllers
 {
@@ -66,6 +68,16 @@ namespace DemoApi.Controllers
                 khoa.TenKhoa = input.TenKhoa;
                 khoa.Sdt = input.SDT;
                 khoa.Filter = input.MaKhoa + " " + input.TenKhoa;
+
+                List<OutputImage> listimage = new List<OutputImage>();
+                foreach(var img in input.Images)
+                {
+                    OutputImage output = new OutputImage();
+                    output.UrlImage = UploadFiles.SaveImage(img);
+                    output.Position = 1;
+                    listimage.Add(output);
+                }
+                khoa.UrlImages = JsonSerializer.Serialize(listimage);
 
                 _context.Khoas.Add(khoa);
                 _context.SaveChanges();

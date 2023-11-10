@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoApi.Migrations
 {
     [DbContext(typeof(QuanLySinhVienContext))]
-    [Migration("20231110112053_init")]
-    partial class init
+    [Migration("20231110131032_edit")]
+    partial class edit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,6 +131,9 @@ namespace DemoApi.Migrations
                     b.Property<string>("TenKhoa")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("UrlImages")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
