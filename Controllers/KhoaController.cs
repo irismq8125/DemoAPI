@@ -3,7 +3,10 @@ using DemoApi.Models.Entity;
 using DemoApi.Models.Khoa;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+
 
 namespace DemoApi.Controllers
 {
@@ -19,8 +22,8 @@ namespace DemoApi.Controllers
 
 
         //api get all data
-        [HttpGet("danh-sach-khoa-1")] 
-        public IActionResult DanhSachKhoa1()
+        [HttpGet("danh-sach-khoa")] 
+        public IActionResult DanhSachKhoa()
         {
             var items = _context.Khoas
                 .Select(c => new OutputKhoa()
@@ -29,6 +32,7 @@ namespace DemoApi.Controllers
                     MaKhoa = c.MaKhoa,
                     TenKhoa = c.TenKhoa,
                     Sdt = c.Sdt,
+                    UrlImages = c.UrlImages,
                 })
                 .ToList();
             return Ok(items);

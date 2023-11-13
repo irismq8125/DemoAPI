@@ -13,5 +13,7 @@ namespace DemoApi.Models.Khoa
         public string? TenKhoa { get; set; }
 
         public string? Sdt { get; set; }
+
+        public string? UrlImages { get; set; }
     }
 }
