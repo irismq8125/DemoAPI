@@ -1,9 +1,10 @@
 ﻿using DemoApi.Common;
 using DemoApi.Models.Entity;
 using DemoApi.Models.Khoa;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+//using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -12,6 +13,7 @@ namespace DemoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "users")]
     public class KhoaController : ControllerBase
     {
         private readonly QuanLySinhVienContext _context;
@@ -19,7 +21,6 @@ namespace DemoApi.Controllers
         {
             _context = context;
         }
-
 
         //api get all data
         [HttpGet("danh-sach-khoa")] 
